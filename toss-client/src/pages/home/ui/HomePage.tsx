@@ -1,3 +1,5 @@
+import { Button } from '@toss/tds-mobile'
+
 export function HomePage() {
-  return <h1>Hello World</h1>
+  return <Button>Hello World</Button>
 }
