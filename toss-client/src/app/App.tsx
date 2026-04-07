@@ -1,10 +1,5 @@
-import { TDSMobileAITProvider } from '@toss/tds-mobile-ait'
-import { HomePage } from '@/pages/home'
+import { Providers } from './providers'
 
 export function App() {
-  return (
-    <TDSMobileAITProvider>
-      <HomePage />
-    </TDSMobileAITProvider>
-  )
+  return <Providers />
 }

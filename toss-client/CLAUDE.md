@@ -67,6 +67,11 @@ src/
 - `shared/` has no slices — segments sit at the top level directly.
 - Keep slices self-contained: co-locate UI, model, API, and lib within each slice.
 
+## Naming Conventions
+
+- All folder and file names must use **kebab-case**.
+  - e.g., `error-boundary-provider.tsx`, `query-provider.tsx`, `root-layout.tsx`
+
 ## Tech Stack
 
 - Vite + React + TypeScript
