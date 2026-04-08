@@ -31,10 +31,3 @@ export interface UserInfo {
 export interface TossApiResponse<T> {
   success: T
 }
-
-export interface TossApiError {
-  error: {
-    code: string
-    message: string
-  }
-}

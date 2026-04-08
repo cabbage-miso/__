@@ -6,16 +6,34 @@ import { TlsClient } from './clients/tls-client'
 import { AuthService } from './services/auth-service'
 import { createAuthRoutes } from './routes/auth'
 
+const required = [
+  'CERT_PATH',
+  'KEY_PATH',
+  'TOSS_API_BASE_URL',
+  'DECRYPTION_KEY',
+  'DECRYPTION_AAD',
+] as const
+for (const key of required) {
+  if (!process.env[key]) {
+    throw new Error(`Missing required env var: ${key}`)
+  }
+}
+
 const app = new Hono()
 
 app.use(
   '/*',
   cors({
-    origin: '*',
+    origin: process.env.CORS_ORIGIN ?? 'http://localhost:5173',
     allowMethods: ['GET', 'POST', 'OPTIONS'],
     allowHeaders: ['Content-Type', 'Authorization'],
   }),
 )
+
+app.onError((err, c) => {
+  console.error(err)
+  return c.json({ error: err.message }, 500)
+})
 
 const tlsClient = new TlsClient(
   process.env.CERT_PATH!,

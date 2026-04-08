@@ -4,7 +4,7 @@ import type { UserInfo } from './types'
 
 export function useUserInfo(accessToken: string | null) {
   return useQuery<UserInfo>({
-    queryKey: ['user', 'me'],
+    queryKey: ['user', 'me', accessToken],
     queryFn: async () => {
       const result = await getUserInfo(accessToken!)
       return result.success

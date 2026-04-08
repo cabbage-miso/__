@@ -42,8 +42,15 @@ export class TlsClient {
         })
         res.on('end', () => {
           try {
-            const parsed = JSON.parse(data) as T
-            resolve(parsed)
+            const parsed = JSON.parse(data)
+            if (
+              res.statusCode &&
+              (res.statusCode < 200 || res.statusCode >= 300)
+            ) {
+              reject(new Error(`Toss API error (${res.statusCode}): ${data}`))
+              return
+            }
+            resolve(parsed as T)
           } catch {
             reject(new Error(`Failed to parse response: ${data}`))
           }
