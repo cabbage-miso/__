@@ -1,7 +1,7 @@
 import ky from 'ky'
 
 const API_BASE_URL =
-  import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:4000'
+  import.meta.env.VITE_API_BASE_URL ?? 'http://192.168.55.253:4000'
 
 export const apiClient = ky.create({
   prefix: API_BASE_URL,

@@ -63,10 +63,10 @@ export function HomePage() {
               </div>
             ) : null}
           </div>
-          <BottomCTA onClick={handleLogout}>로그아웃</BottomCTA>
+          <BottomCTA {...{ onClick: handleLogout }}>로그아웃</BottomCTA>
         </>
       ) : (
-        <BottomCTA onClick={handleLogin}>로그인</BottomCTA>
+        <BottomCTA {...{ onClick: handleLogin }}>로그인</BottomCTA>
       )}
     </div>
   )
