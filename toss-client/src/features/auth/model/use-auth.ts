@@ -16,8 +16,12 @@ export function useAuth() {
   }, [])
 
   const logout = useCallback(async () => {
-    if (tokens?.accessToken) {
-      await authApi.logout(tokens.accessToken)
+    try {
+      if (tokens?.accessToken) {
+        await authApi.logout(tokens.accessToken)
+      }
+    } catch {
+      // Server logout may fail (expired token, network error) — clear local state regardless
     }
     setTokens(null)
   }, [tokens])
