@@ -4,11 +4,11 @@ RUN corepack enable && corepack prepare pnpm@latest --activate
 
 WORKDIR /app
 
-COPY package.json pnpm-lock.yaml ./
+COPY server/package.json server/pnpm-lock.yaml ./
 RUN pnpm install --frozen-lockfile
 
-COPY tsconfig.json ./
-COPY src/ src/
+COPY server/tsconfig.json ./
+COPY server/src/ src/
 RUN pnpm run build
 
 EXPOSE 4000
