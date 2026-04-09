@@ -1,4 +1,5 @@
 import 'dotenv/config'
+import * as fs from 'node:fs'
 import { serve } from '@hono/node-server'
 import { Hono } from 'hono'
 import { cors } from 'hono/cors'
@@ -7,8 +8,6 @@ import { AuthService } from './services/auth-service'
 import { createAuthRoutes } from './routes/auth'
 
 const required = [
-  'CERT_PATH',
-  'KEY_PATH',
   'TOSS_API_BASE_URL',
   'DECRYPTION_KEY',
   'DECRYPTION_AAD',
@@ -17,6 +16,22 @@ for (const key of required) {
   if (!process.env[key]) {
     throw new Error(`Missing required env var: ${key}`)
   }
+}
+
+function loadCert(): { cert: Buffer; key: Buffer } {
+  if (process.env.CERT_BASE64 && process.env.KEY_BASE64) {
+    return {
+      cert: Buffer.from(process.env.CERT_BASE64, 'base64'),
+      key: Buffer.from(process.env.KEY_BASE64, 'base64'),
+    }
+  }
+  if (process.env.CERT_PATH && process.env.KEY_PATH) {
+    return {
+      cert: fs.readFileSync(process.env.CERT_PATH),
+      key: fs.readFileSync(process.env.KEY_PATH),
+    }
+  }
+  throw new Error('Provide CERT_BASE64/KEY_BASE64 or CERT_PATH/KEY_PATH')
 }
 
 const app = new Hono()
@@ -35,11 +50,8 @@ app.onError((err, c) => {
   return c.json({ error: err.message }, 500)
 })
 
-const tlsClient = new TlsClient(
-  process.env.CERT_PATH!,
-  process.env.KEY_PATH!,
-  process.env.TOSS_API_BASE_URL!,
-)
+const { cert, key } = loadCert()
+const tlsClient = new TlsClient(cert, key, process.env.TOSS_API_BASE_URL!)
 
 const authService = new AuthService(
   tlsClient,

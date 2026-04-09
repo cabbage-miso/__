@@ -1,14 +1,13 @@
 import * as https from 'node:https'
-import * as fs from 'node:fs'
 
 export class TlsClient {
   private cert: Buffer
   private key: Buffer
   private baseUrl: string
 
-  constructor(certPath: string, keyPath: string, baseUrl: string) {
-    this.cert = fs.readFileSync(certPath)
-    this.key = fs.readFileSync(keyPath)
+  constructor(cert: Buffer, key: Buffer, baseUrl: string) {
+    this.cert = cert
+    this.key = key
     this.baseUrl = baseUrl
   }
 
